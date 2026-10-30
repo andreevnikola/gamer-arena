@@ -30,7 +30,7 @@ async function expectCrud<T extends { id: number }, N>(
 
 describe("IRepository<T> contract per entity", () => {
   it("users", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     await expectCrud(
       repos.users,
       async () => ({ userName: "u", email: "u@x.io", passwordHash: "h", gamerTag: "GT" }),
@@ -39,12 +39,12 @@ describe("IRepository<T> contract per entity", () => {
   });
 
   it("games", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     await expectCrud(repos.games, async () => ({ name: "G", genre: "x", teamSize: 2 }), (g) => ({ ...g, teamSize: 5 }));
   });
 
   it("teams", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     const captain = await makeUser(repos);
     await expectCrud(
       repos.teams,
@@ -54,7 +54,7 @@ describe("IRepository<T> contract per entity", () => {
   });
 
   it("team members", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     const user = await makeUser(repos);
     const team = await repos.teams.add({ name: "T", captainId: user.id });
     await expectCrud(
@@ -65,7 +65,7 @@ describe("IRepository<T> contract per entity", () => {
   });
 
   it("tournaments", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     const organizer = await makeUser(repos, "organizer");
     const game = await makeGame(repos);
     await expectCrud(
@@ -83,7 +83,7 @@ describe("IRepository<T> contract per entity", () => {
   });
 
   it("tournament teams", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     const organizer = await makeUser(repos, "organizer");
     const tournament = await makeTournament(repos, organizer, await makeGame(repos));
     const team = await repos.teams.add({ name: "T", captainId: organizer.id });
@@ -95,7 +95,7 @@ describe("IRepository<T> contract per entity", () => {
   });
 
   it("matches (including self-reference)", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     const organizer = await makeUser(repos, "organizer");
     const tournament = await makeTournament(repos, organizer, await makeGame(repos));
     const final = await repos.matches.add({ tournamentId: tournament.id, round: 2, bracketPosition: 0 });
@@ -107,7 +107,7 @@ describe("IRepository<T> contract per entity", () => {
   });
 
   it("match results", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     const organizer = await makeUser(repos, "organizer");
     const tournament = await makeTournament(repos, organizer, await makeGame(repos));
     const team = await repos.teams.add({ name: "T", captainId: organizer.id });
@@ -120,7 +120,7 @@ describe("IRepository<T> contract per entity", () => {
   });
 
   it("announcements (tournament optional)", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     const author = await makeUser(repos, "organizer");
     await expectCrud(
       repos.announcements,

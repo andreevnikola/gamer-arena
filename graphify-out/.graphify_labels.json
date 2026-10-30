@@ -16,8 +16,6 @@
   "14": "MatchService",
   "15": "TournamentRepository",
   "16": "TournamentTeamRepository",
-  "17": "AnnouncementRepository",
-  "18": "MatchRepository",
   "19": "MatchResultRepository",
   "20": "GamerArena",
   "21": "GamerArena",

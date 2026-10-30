@@ -1,13 +1,15 @@
 import { sql } from "drizzle-orm";
 import {
-  integer,
-  real,
-  sqliteTable,
-  text,
-  unique,
+  boolean,
   check,
-  type AnySQLiteColumn,
-} from "drizzle-orm/sqlite-core";
+  doublePrecision,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  unique,
+  type AnyPgColumn,
+} from "drizzle-orm/pg-core";
 
 export const USER_ROLES = ["player", "organizer", "admin"] as const;
 export const INVITATION_STATUSES = ["pending", "accepted", "declined"] as const;
@@ -24,13 +26,12 @@ export const REGISTRATION_STATUSES = ["pending", "approved", "rejected"] as cons
 export const MATCH_STATUSES = ["pending", "ready", "completed", "disputed"] as const;
 export const BRACKET_SLOTS = ["A", "B"] as const;
 
-const createdAt = (name: string) =>
-  integer(name, { mode: "timestamp" })
-    .notNull()
-    .default(sql`(unixepoch())`);
+const id = () => integer("id").primaryKey().generatedAlwaysAsIdentity();
+const timestampColumn = (name: string) => timestamp(name, { withTimezone: true });
+const createdAt = (name: string) => timestampColumn(name).notNull().defaultNow();
 
-export const users = sqliteTable("users", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const users = pgTable("users", {
+  id: id(),
   userName: text("user_name").notNull().unique(),
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
@@ -39,10 +40,10 @@ export const users = sqliteTable("users", {
   registeredOn: createdAt("registered_on"),
 });
 
-export const games = sqliteTable(
+export const games = pgTable(
   "games",
   {
-    id: integer("id").primaryKey({ autoIncrement: true }),
+    id: id(),
     name: text("name").notNull().unique(),
     genre: text("genre").notNull(),
     teamSize: integer("team_size").notNull(),
@@ -50,20 +51,20 @@ export const games = sqliteTable(
   (t) => [check("games_team_size_positive", sql`${t.teamSize} >= 1`)],
 );
 
-export const teams = sqliteTable("teams", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const teams = pgTable("teams", {
+  id: id(),
   name: text("name").notNull().unique(),
   captainId: integer("captain_id")
     .notNull()
     .references(() => users.id, { onDelete: "restrict" }),
-  isSoloEntry: integer("is_solo_entry", { mode: "boolean" }).notNull().default(false),
+  isSoloEntry: boolean("is_solo_entry").notNull().default(false),
   createdOn: createdAt("created_on"),
 });
 
-export const teamMembers = sqliteTable(
+export const teamMembers = pgTable(
   "team_members",
   {
-    id: integer("id").primaryKey({ autoIncrement: true }),
+    id: id(),
     teamId: integer("team_id")
       .notNull()
       .references(() => teams.id, { onDelete: "cascade" }),
@@ -73,15 +74,15 @@ export const teamMembers = sqliteTable(
     invitationStatus: text("invitation_status", { enum: INVITATION_STATUSES })
       .notNull()
       .default("pending"),
-    joinedOn: integer("joined_on", { mode: "timestamp" }),
+    joinedOn: timestampColumn("joined_on"),
   },
   (t) => [unique("team_members_team_user").on(t.teamId, t.userId)],
 );
 
-export const tournaments = sqliteTable(
+export const tournaments = pgTable(
   "tournaments",
   {
-    id: integer("id").primaryKey({ autoIncrement: true }),
+    id: id(),
     gameId: integer("game_id")
       .notNull()
       .references(() => games.id, { onDelete: "restrict" }),
@@ -91,9 +92,9 @@ export const tournaments = sqliteTable(
     title: text("title").notNull(),
     format: text("format", { enum: TOURNAMENT_FORMATS }).notNull().default("single_elimination"),
     maxParticipants: integer("max_participants").notNull(),
-    prizePool: real("prize_pool").notNull().default(0),
-    startDate: integer("start_date", { mode: "timestamp" }).notNull(),
-    endDate: integer("end_date", { mode: "timestamp" }).notNull(),
+    prizePool: doublePrecision("prize_pool").notNull().default(0),
+    startDate: timestampColumn("start_date").notNull(),
+    endDate: timestampColumn("end_date").notNull(),
     status: text("status", { enum: TOURNAMENT_STATUSES }).notNull().default("draft"),
   },
   (t) => [
@@ -103,10 +104,10 @@ export const tournaments = sqliteTable(
   ],
 );
 
-export const tournamentTeams = sqliteTable(
+export const tournamentTeams = pgTable(
   "tournament_teams",
   {
-    id: integer("id").primaryKey({ autoIncrement: true }),
+    id: id(),
     tournamentId: integer("tournament_id")
       .notNull()
       .references(() => tournaments.id, { onDelete: "cascade" }),
@@ -120,29 +121,29 @@ export const tournamentTeams = sqliteTable(
   (t) => [unique("tournament_teams_tournament_team").on(t.tournamentId, t.teamId)],
 );
 
-export const matches = sqliteTable("matches", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const matches = pgTable("matches", {
+  id: id(),
   tournamentId: integer("tournament_id")
     .notNull()
     .references(() => tournaments.id, { onDelete: "cascade" }),
   teamAId: integer("team_a_id").references(() => teams.id, { onDelete: "restrict" }),
   teamBId: integer("team_b_id").references(() => teams.id, { onDelete: "restrict" }),
   winnerTeamId: integer("winner_team_id").references(() => teams.id, { onDelete: "restrict" }),
-  nextMatchId: integer("next_match_id").references((): AnySQLiteColumn => matches.id, {
+  nextMatchId: integer("next_match_id").references((): AnyPgColumn => matches.id, {
     onDelete: "set null",
   }),
   // Which slot of the next match the winner fills. Not in the original ERD; required to advance winners.
   nextSlot: text("next_slot", { enum: BRACKET_SLOTS }),
   round: integer("round").notNull(),
   bracketPosition: integer("bracket_position").notNull(),
-  scheduledTime: integer("scheduled_time", { mode: "timestamp" }),
+  scheduledTime: timestampColumn("scheduled_time"),
   status: text("status", { enum: MATCH_STATUSES }).notNull().default("pending"),
 });
 
-export const matchResults = sqliteTable(
+export const matchResults = pgTable(
   "match_results",
   {
-    id: integer("id").primaryKey({ autoIncrement: true }),
+    id: id(),
     matchId: integer("match_id")
       .notNull()
       .references(() => matches.id, { onDelete: "cascade" }),
@@ -152,7 +153,7 @@ export const matchResults = sqliteTable(
     scoreA: integer("score_a").notNull(),
     scoreB: integer("score_b").notNull(),
     proofUrl: text("proof_url"),
-    isConfirmed: integer("is_confirmed", { mode: "boolean" }).notNull().default(false),
+    isConfirmed: boolean("is_confirmed").notNull().default(false),
     submittedOn: createdAt("submitted_on"),
   },
   (t) => [
@@ -161,8 +162,8 @@ export const matchResults = sqliteTable(
   ],
 );
 
-export const announcements = sqliteTable("announcements", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const announcements = pgTable("announcements", {
+  id: id(),
   authorId: integer("author_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),

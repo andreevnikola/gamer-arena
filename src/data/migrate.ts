@@ -1,6 +1,16 @@
-import { createDb, runMigrations } from "./db";
+import { createDb, getDatabaseUrl, runMigrations } from "./db";
 
-const handle = createDb();
-runMigrations(handle.db);
-handle.close();
-console.log("Migrations applied.");
+async function main() {
+  const handle = createDb(getDatabaseUrl("direct"));
+  try {
+    await runMigrations(handle.db);
+    console.log("Migrations applied.");
+  } finally {
+    await handle.close();
+  }
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

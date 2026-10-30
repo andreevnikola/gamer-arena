@@ -1,43 +1,44 @@
-import fs from "node:fs";
 import path from "node:path";
-import Database from "better-sqlite3";
-import { drizzle, type BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
+import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
+import { migrate } from "drizzle-orm/node-postgres/migrator";
+import type { PgDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
+import { Pool } from "pg";
 import * as schema from "./schema";
 
-export type Db = BetterSQLite3Database<typeof schema>;
+/** Driver-agnostic Drizzle Postgres handle: node-postgres in the app, PGlite in tests. */
+export type Db = PgDatabase<PgQueryResultHKT, typeof schema>;
+
+export type NodeDb = NodePgDatabase<typeof schema>;
 
 export interface DbHandle {
-  db: Db;
-  close: () => void;
+  db: NodeDb;
+  close: () => Promise<void>;
 }
 
 export const MIGRATIONS_FOLDER = path.join(process.cwd(), "drizzle");
-export const DEFAULT_DB_PATH = path.join(process.cwd(), "data", "gamerarena.db");
 
 /**
- * Opens a SQLite database with foreign keys enforced.
- * Pass ":memory:" for an isolated database (used by tests).
+ * Connection string for the app. Prefers the pooled Neon endpoint (right for
+ * serverless request handlers); migrations and scripts use the direct one.
  */
-export function createDb(file: string = DEFAULT_DB_PATH): DbHandle {
-  if (file !== ":memory:") {
-    fs.mkdirSync(path.dirname(file), { recursive: true });
-  }
-  const sqlite = new Database(file);
-  sqlite.pragma("foreign_keys = ON");
-  if (file !== ":memory:") {
-    sqlite.pragma("journal_mode = WAL");
-  }
-  return { db: drizzle(sqlite, { schema }), close: () => sqlite.close() };
+export function getDatabaseUrl(kind: "pooled" | "direct" = "pooled"): string {
+  const url =
+    kind === "pooled"
+      ? (process.env.DATABASE_URL_POOLED ?? process.env.DATABASE_URL)
+      : process.env.DATABASE_URL;
+  if (!url) throw new Error("DATABASE_URL is not set. Copy .env.example to .env and fill it in.");
+  return url;
 }
 
-export function runMigrations(db: Db): void {
-  migrate(db, { migrationsFolder: MIGRATIONS_FOLDER });
+/** Opens a connection pool against Postgres (Neon). */
+export function createDb(connectionString: string = getDatabaseUrl()): DbHandle {
+  const pool = new Pool({ connectionString });
+  // An idle client dropped by the server must not crash the process.
+  pool.on("error", (error) => console.error("Postgres pool error:", error.message));
+  return { db: drizzle(pool, { schema }), close: () => pool.end() };
 }
 
-/** Opens a database and applies all migrations. */
-export function createMigratedDb(file?: string): DbHandle {
-  const handle = createDb(file);
-  runMigrations(handle.db);
-  return handle;
+/** Applies pending migrations from ./drizzle. Use the direct (non-pooled) connection. */
+export async function runMigrations(db: NodeDb): Promise<void> {
+  await migrate(db, { migrationsFolder: MIGRATIONS_FOLDER });
 }

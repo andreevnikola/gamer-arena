@@ -1,9 +1,9 @@
-import { createDb } from "@/data/db";
+import { createDb, getDatabaseUrl } from "@/data/db";
 import { createRepositories } from "@/repositories";
 import { SEED_PASSWORD, seedDatabase } from "./seed-data";
 
 async function main() {
-  const handle = createDb();
+  const handle = createDb(getDatabaseUrl("direct"));
   try {
     const seeded = await seedDatabase(createRepositories(handle.db));
     console.log(
@@ -12,7 +12,7 @@ async function main() {
         : "Database already contains data - seed skipped. Run `npm run db:reset` to start fresh.",
     );
   } finally {
-    handle.close();
+    await handle.close();
   }
 }
 

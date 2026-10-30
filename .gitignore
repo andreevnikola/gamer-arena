@@ -41,11 +41,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# sqlite databases (local only; schema lives in /drizzle)
-/data/*.db
-/data/*.db-shm
-/data/*.db-wal
-
 # test output
 /.vitest/
 
@@ -55,5 +50,5 @@ next-env.d.ts
 /graphify-out/cost.json
 /graphify-out/.graphify_python
 
-
-
+# legacy local SQLite files from before the Postgres migration
+/data/

@@ -2,12 +2,12 @@ import { describe, expect, it } from "vitest";
 import { createServices } from "@/business";
 import { seedDatabase, SEED_PASSWORD } from "../../scripts/seed-data";
 import { verifyPassword } from "@/business/password";
-import { useTestDb } from "../helpers/db";
+import { PG_ERROR, expectDbError, useTestDb } from "../helpers/db";
 import { NOW, enrollSoloTeams, makeArena } from "../helpers/world";
 
-describe("services on a real SQLite database", () => {
+describe("services on a real Postgres database", () => {
   it("runs a 6-team tournament (with byes) from registration to a champion", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     const arena = await makeArena(repos);
     const teams = await enrollSoloTeams(arena, 6);
     await arena.services.tournaments.closeRegistration(arena.organizer.id, arena.tournament.id);
@@ -38,7 +38,7 @@ describe("services on a real SQLite database", () => {
   });
 
   it("start() is atomic: a failure after seeding leaves no matches and no seeds behind", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     const arena = await makeArena(repos);
     await enrollSoloTeams(arena, 4);
     await arena.services.tournaments.closeRegistration(arena.organizer.id, arena.tournament.id);
@@ -61,18 +61,19 @@ describe("services on a real SQLite database", () => {
   });
 
   it("DB constraints back the services up: concurrent duplicate registration is impossible", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     const arena = await makeArena(repos);
     const [team] = await enrollSoloTeams(arena, 1);
-    await expect(
+    await expectDbError(
       repos.tournamentTeams.add({ tournamentId: arena.tournament.id, teamId: team.id }),
-    ).rejects.toThrow(/UNIQUE/);
+      PG_ERROR.unique,
+    );
   });
 });
 
 describe("seed", () => {
   it("builds demo data through the business rules and is idempotent", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     expect(await seedDatabase(repos)).toBe(true);
     expect(await seedDatabase(repos)).toBe(false);
 

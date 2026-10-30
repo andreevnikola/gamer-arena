@@ -4,7 +4,7 @@ import { makeGame, makeTournament, makeUser } from "../helpers/world";
 
 describe("specific repository queries", () => {
   it("users: lookups by email (case-insensitive input), user name and gamer tag", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     const u = await repos.users.add({ userName: "jane", email: "jane@x.io", passwordHash: "h", gamerTag: "Jane" });
     expect((await repos.users.getByEmail("JANE@x.io"))?.id).toBe(u.id);
     expect((await repos.users.getByUserName("jane"))?.id).toBe(u.id);
@@ -13,7 +13,7 @@ describe("specific repository queries", () => {
   });
 
   it("teams and members", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     const [a, b] = [await makeUser(repos), await makeUser(repos)];
     const t1 = await repos.teams.add({ name: "One", captainId: a.id });
     await repos.teams.add({ name: "Two", captainId: b.id });
@@ -29,7 +29,7 @@ describe("specific repository queries", () => {
   });
 
   it("tournaments by organizer and status; registrations by tournament", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     const [o1, o2] = [await makeUser(repos, "organizer"), await makeUser(repos, "organizer")];
     const game = await makeGame(repos);
     const t1 = await makeTournament(repos, o1, game, { status: "draft" });
@@ -45,7 +45,7 @@ describe("specific repository queries", () => {
   });
 
   it("matches come back ordered by round then position; results and announcements by parent", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     const organizer = await makeUser(repos, "organizer");
     const tournament = await makeTournament(repos, organizer, await makeGame(repos));
     await repos.matches.add({ tournamentId: tournament.id, round: 2, bracketPosition: 0 });
@@ -71,7 +71,7 @@ describe("specific repository queries", () => {
 
 describe("unit of work", () => {
   it("commits all writes when the callback succeeds", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     await repos.unitOfWork.run(async () => {
       await makeUser(repos);
       await makeUser(repos);
@@ -80,7 +80,7 @@ describe("unit of work", () => {
   });
 
   it("rolls everything back when the callback throws, and rethrows", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     await expect(
       repos.unitOfWork.run(async () => {
         await makeUser(repos);
@@ -91,7 +91,7 @@ describe("unit of work", () => {
   });
 
   it("nested runs join the outer transaction", async () => {
-    const { repos } = useTestDb();
+    const { repos } = await useTestDb();
     await expect(
       repos.unitOfWork.run(async () => {
         await repos.unitOfWork.run(() => makeUser(repos));

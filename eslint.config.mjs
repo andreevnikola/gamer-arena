@@ -3,7 +3,7 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 
 const UI = ["@/app", "@/app/*", "@/components", "@/components/*", "@/composition"];
-const DB = ["@/data/db", "@/data/schema", "drizzle-orm", "drizzle-orm/*", "better-sqlite3"];
+const DB = ["@/data/db", "@/data/schema", "drizzle-orm", "drizzle-orm/*", "pg", "@electric-sql/pglite"];
 
 /** Forbids imports of the listed patterns inside the matched files. */
 const forbid = (files, group, message) => ({

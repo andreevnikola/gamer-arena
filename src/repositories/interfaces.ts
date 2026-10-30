@@ -64,8 +64,8 @@ export interface IAnnouncementRepository extends IRepository<Announcement, NewAn
 
 /**
  * Runs several repository calls atomically. The callback must only await
- * repository calls (no external I/O): SQLite is single-writer and the
- * transaction spans the whole callback.
+ * repository calls (no external I/O): the transaction, and the lock that
+ * serialises units of work, are held for the whole callback.
  */
 export interface IUnitOfWork {
   run<T>(work: () => Promise<T>): Promise<T>;

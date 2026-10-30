@@ -13,7 +13,7 @@ Organizers create tournaments, teams (or solo players) register, brackets are ge
 
 This repository holds **Sprint 1 only: Git, Trello, Data and Business layers**:
 
-- 9 entities (Drizzle schema, SQLite) with migrations and demo data
+- 9 entities (Drizzle schema, Postgres) with migrations and demo data
 - Repository layer: generic `IRepository<T>` CRUD plus entity-specific repositories and a unit of work
 - Business layer: bracket generation (the "calculator" service), registration access check, validation, role checks, match results and disputes
 - A single showcase page (live bracket + tournament list) that proves the layers connect
@@ -23,38 +23,38 @@ Not in Sprint 1: login/sessions, forms, team and registration screens, deploymen
 
 ## Stack
 
-Next.js 16 (App Router), React 19, TypeScript (strict), Drizzle ORM + SQLite (better-sqlite3), shadcn/ui + Tailwind CSS 4, Vitest, ESLint.
+Next.js 16 (App Router), React 19, TypeScript (strict), Drizzle ORM + PostgreSQL (Neon, `pg`), shadcn/ui + Tailwind CSS 4, Vitest, ESLint.
 
 ## Run it
 
-Requirements: Node.js 20.9+ (developed on 24) and npm.
+Requirements: Node.js 20.9+ (developed on 24), npm, and a PostgreSQL database (Neon).
 
 ```bash
 npm install
-npm run setup     # creates data/gamerarena.db, applies migrations, loads demo data
+cp .env.example .env   # then fill in DATABASE_URL (direct) and DATABASE_URL_POOLED
+npm run setup          # applies migrations, loads demo data
 npm run dev       # http://localhost:3000
 ```
 
 Other commands:
 
 ```bash
-npm test               # all tests (in-memory SQLite, never touches data/gamerarena.db)
+npm test               # all tests (in-process Postgres via PGlite, never touches Neon)
 npm run test:coverage  # coverage report
 npm run typecheck
 npm run lint           # also enforces the layer boundaries
 npm run build && npm start
-npm run db:reset       # delete the local database, migrate and re-seed
+npm run db:reset       # DROP all tables in the database from .env, migrate and re-seed
 npm run db:generate    # after editing src/data/schema.ts: generate a new migration
 ```
 
 ## Caveats
 
-- **The database is a local file** (`data/gamerarena.db`) and is not committed. Every teammate runs `npm run setup` once. Use `npm run db:reset` to start clean.
+- **The database is Neon Postgres**, configured in `.env` (not committed; see `.env.example`). The app uses `DATABASE_URL_POOLED`; migrations and scripts use the direct `DATABASE_URL`. Migrations are not applied at app start: run `npm run db:migrate`. `npm run db:reset` is destructive, so never point it at data you care about.
 - **No login yet.** Roles are a `users.role` column (player, organizer, admin) checked in the business layer. Seeded users share the demo password `Password1`; it is only meaningful once authentication exists.
 - **Pages read the database at request time** (Next.js Cache Components: `await connection()` inside `<Suspense>`). Keep that pattern for new pages or the data freezes at build time.
-- **`better-sqlite3` is a native module.** If `npm install` cannot fetch a prebuilt binary for your Node version, install build tools or use an LTS Node.
 - **`npm install` prints audit and script-approval warnings** from dev tooling. They do not affect the app.
-- **Unit of work:** inside `unitOfWork.run(...)` only await repository calls (SQLite transactions are synchronous per connection).
+- **Unit of work:** inside `unitOfWork.run(...)` only await repository calls (the transaction and a serialising advisory lock are held for the whole callback).
 - **Graphify** (code exploration, optional): `uv tool install graphifyy`, then see the Graphify section in `CLAUDE.md`. The graph lives in `graphify-out/`.
 - **ERD diagram** is in `docs/erd.png` (SVG alongside); the Google Doc references it.
 

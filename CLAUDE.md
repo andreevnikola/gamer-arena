@@ -1,7 +1,7 @@
 # GamerArena
 
 Esports tournament platform: teams register, brackets are generated, scores are confirmed by both sides.
-Next.js (App Router) + strict TypeScript + SQLite via Drizzle. Sprint 1 = data and business layers (+ one read-only showcase page).
+Next.js (App Router) + strict TypeScript + PostgreSQL (Neon) via Drizzle. Sprint 1 = data and business layers (+ one read-only showcase page).
 
 @AGENTS.md
 
@@ -34,7 +34,8 @@ Decisions:
 - 1v1 entrants are solo teams (`isSoloEntry`), so `Match` always references `Team`.
 - Services take `Repositories` and a `Clock`; never call `new Date()` inside a service.
 - Expected failures throw `DomainError(code, message, fields)`; codes: `validation | not_found | forbidden | conflict | invalid_state`.
-- Multi-write operations use `repos.unitOfWork.run(...)`. The callback may only await repository calls.
+- Multi-write operations use `repos.unitOfWork.run(...)`. The callback may only await repository calls. Repositories join the transaction through `DbContext` (AsyncLocalStorage); units of work are serialised by an advisory lock.
+- Migrations are applied with `npm run db:migrate` (direct Neon URL), never at app start. App uses `DATABASE_URL_POOLED`.
 - Pure logic stays pure and separately testable (`bracket.ts`, `validation.ts`, `evaluateRegistration`).
 - `cacheComponents` is on: DB reads go inside `<Suspense>` after `await connection()`.
 - Schema change = edit `schema.ts` → `db:generate` → commit migration. Never edit an applied migration.
@@ -70,8 +71,8 @@ Vitest, `tests/` mirrors `src/`. A change is not done until `typecheck`, `lint` 
 |---|---|---|
 | Pure unit | `tests/business/validation`, `bracket` | No I/O. Boundaries and invariants (bracket checked for every size 2–40). |
 | Service unit | `tests/business/*-service` | In-memory fakes from `tests/helpers/fakes.ts`. One test per rule and per error code. |
-| Repository integration | `tests/repositories` | Real SQLite `:memory:` + real migrations via `useTestDb()`. Assert constraints, cascades, rollback. |
-| Flow integration | `tests/integration` | Services on real SQLite: full tournament, atomic start, seed. |
+| Repository integration | `tests/repositories` | Real Postgres (PGlite, in-process) + real migrations via `await useTestDb()`. Assert constraints, cascades, rollback. |
+| Flow integration | `tests/integration` | Services on real Postgres (PGlite): full tournament, atomic start, seed. |
 
 Policy: every business rule has a passing and a failing test; bug fix starts with a failing test; no mocking the DB in repository tests; deterministic (inject the clock, no sleeps); target ≥90% coverage on `src/business` and `src/repositories`.
 
