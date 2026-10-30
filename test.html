@@ -1,0 +1,2081 @@
+Izvadki_uroci_9-10.html 100%
+<!doctype html>
+<html lang="bg">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Извадки и оценки</title>
+    <style>
+      :root {
+        --fs: 20px;
+        --bg: #f4f3ee;
+        --card: #ffffff;
+        --ink: #15171a;
+        --muted: #5b616b;
+        --line: #c9ccd2;
+        --green: #1f8a52;
+        --green-l: #bfe5cf;
+        --orange: #e07000;
+        --blue: #1d63c9;
+        --purple: #7a3fb8;
+        --red: #c62f2f;
+        --tab: #24303f;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+      }
+      body {
+        font-family: "Segoe UI", Roboto, "Noto Sans", Arial, sans-serif;
+        font-size: var(--fs);
+        line-height: 1.35;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .m {
+        font-family: "Cambria Math", Cambria, "Times New Roman", serif;
+        font-style: normal;
+      }
+      .m i {
+        font-style: italic;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        background: var(--tab);
+        color: #fff;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.4em;
+        padding: 0.35em 0.6em;
+      }
+      header h1 {
+        font-size: 1.05em;
+        margin: 0 0.6em 0 0.2em;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3em;
+        flex: 1;
+      }
+      .tabs button {
+        background: #3a4859;
+        color: #fff;
+        border: 0;
+        border-radius: 0.45em;
+        padding: 0.5em 0.9em;
+        font-size: 1em;
+        min-height: 2.4em;
+        cursor: pointer;
+      }
+      .tabs button.on {
+        background: #fff;
+        color: var(--tab);
+        font-weight: 700;
+      }
+      .tools {
+        display: flex;
+        gap: 0.3em;
+      }
+      .tools button {
+        background: #3a4859;
+        color: #fff;
+        border: 0;
+        border-radius: 0.45em;
+        min-width: 2.4em;
+        min-height: 2.4em;
+        font-size: 0.95em;
+        cursor: pointer;
+      }
+      main {
+        padding: 0.7em;
+        max-width: 1900px;
+        margin: 0 auto;
+      }
+      section {
+        display: none;
+      }
+      section.on {
+        display: block;
+      }
+      .grid {
+        display: grid;
+        gap: 0.7em;
+      }
+      .g2 {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+      }
+      @media (max-width: 1000px) {
+        .g2 {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+      .card {
+        background: var(--card);
+        border-radius: 0.7em;
+        padding: 0.7em 0.9em;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+      }
+      .card h2 {
+        font-size: 1.05em;
+        margin: 0 0 0.45em;
+      }
+      .card h3 {
+        font-size: 1em;
+        margin: 0.6em 0 0.3em;
+      }
+      .q {
+        background: #fff6d6;
+        border-left: 0.35em solid #e2b100;
+        padding: 0.45em 0.7em;
+        border-radius: 0.35em;
+        margin: 0.2em 0 0.6em;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4em;
+        align-items: center;
+        margin: 0.35em 0;
+      }
+      .lbl {
+        color: var(--muted);
+        margin-right: 0.2em;
+      }
+      .btn {
+        border: 2px solid var(--tab);
+        background: #fff;
+        color: var(--tab);
+        border-radius: 0.5em;
+        padding: 0.45em 0.85em;
+        font-size: 1em;
+        min-height: 2.5em;
+        min-width: 2.6em;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .btn.pri {
+        background: var(--green);
+        border-color: var(--green);
+        color: #fff;
+      }
+      .btn.sel {
+        background: var(--tab);
+        color: #fff;
+      }
+      .btn.ghost {
+        border-color: var(--line);
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .btn:active {
+        transform: translateY(1px);
+      }
+      canvas {
+        width: 100%;
+        display: block;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35em;
+        min-height: 2.6em;
+        align-items: center;
+      }
+      .chip {
+        width: 2.3em;
+        height: 2.3em;
+        border-radius: 50%;
+        background: var(--green-l);
+        color: #0d4b2b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.05em;
+      }
+      .stat {
+        display: grid;
+        grid-template-columns: max-content max-content;
+        gap: 0.15em 1em;
+        align-items: baseline;
+      }
+      .stat .v {
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+      .c-n {
+        color: var(--orange);
+      }
+      .c-n1 {
+        color: var(--blue);
+      }
+      .c-g {
+        color: var(--green);
+      }
+      .c-p {
+        color: var(--purple);
+      }
+      .sw {
+        display: inline-block;
+        width: 1.4em;
+        height: 0.3em;
+        border-radius: 0.2em;
+        vertical-align: middle;
+        margin-right: 0.3em;
+      }
+      table.t {
+        border-collapse: collapse;
+        font-variant-numeric: tabular-nums;
+      }
+      table.t th,
+      table.t td {
+        border: 1px solid #6b717a;
+        padding: 0.22em 0.5em;
+        text-align: center;
+      }
+      table.t th {
+        background: #eef0f3;
+        font-weight: 600;
+      }
+      table.t tr.sum td {
+        font-weight: 700;
+        background: #f7f7f2;
+      }
+      .scroll {
+        overflow: auto;
+      }
+      .hist {
+        max-height: 13em;
+      }
+      .hide-calc td.calc {
+        color: transparent;
+        text-shadow: none;
+      }
+      .hide-calc td.calc::after {
+        content: "?";
+        color: #9aa0a8;
+      }
+      .hide-calc td.calc {
+        position: relative;
+      }
+      .hide-calc td.calc::after {
+        position: absolute;
+        left: 0;
+        right: 0;
+        text-align: center;
+      }
+      .res .line {
+        margin: 0.2em 0;
+      }
+      .big {
+        font-size: 1.15em;
+      }
+      input.num {
+        font-size: 1em;
+        width: 5.2em;
+        padding: 0.3em 0.4em;
+        border: 2px solid var(--line);
+        border-radius: 0.4em;
+        text-align: center;
+      }
+      select {
+        font-size: 1em;
+        padding: 0.35em 0.4em;
+        border: 2px solid var(--line);
+        border-radius: 0.4em;
+        background: #fff;
+        max-width: 100%;
+      }
+      .ed td {
+        padding: 0.15em 0.25em;
+      }
+      .ed input {
+        width: 5em;
+      }
+      .note {
+        color: var(--muted);
+        font-size: 0.85em;
+      }
+      /* формули */
+      .frac {
+        display: inline-flex;
+        flex-direction: column;
+        vertical-align: middle;
+        text-align: center;
+        margin: 0 0.12em;
+      }
+      .frac > span:first-child {
+        border-bottom: 1.5px solid currentColor;
+        padding: 0 0.2em;
+      }
+      .frac > span:last-child {
+        padding: 0 0.2em;
+      }
+      .ov {
+        text-decoration: overline;
+        text-decoration-thickness: 1.5px;
+      }
+      .ov2 {
+        display: inline-block;
+        border-top: 4px double currentColor;
+        line-height: 1.05;
+        padding-top: 0.05em;
+      }
+      .sg {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        vertical-align: middle;
+        line-height: 1;
+        margin: 0 0.1em;
+      }
+      .sg small {
+        font-size: 0.6em;
+      }
+      .sg b {
+        font-size: 1.5em;
+        font-weight: 400;
+      }
+      .theory {
+        max-width: 1150px;
+        margin: 0 auto;
+      }
+      .theory .card {
+        margin-bottom: 0.7em;
+      }
+      .theory p,
+      .theory li {
+        margin: 0.3em 0;
+      }
+      .fbox {
+        border: 2px solid var(--tab);
+        border-radius: 0.5em;
+        padding: 0.45em 0.8em;
+        margin: 0.45em 0;
+        background: #fbfbf8;
+      }
+      .fm {
+        font-size: 1.15em;
+        text-align: center;
+        margin: 0.35em 0;
+      }
+      .kp {
+        display: inline-block;
+        background: #eef3ff;
+        border: 1px solid #b9c9ee;
+        border-radius: 0.3em;
+        padding: 0 0.35em;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Извадки и оценки · уроци 9–10</h1>
+      <nav class="tabs">
+        <button data-t="sim" class="on">1. Симулатор на извадки</button>
+        <button data-t="pr">2. Прости числа</button>
+        <button data-t="tab">3. Таблица</button>
+        <button data-t="th">4. Теория</button>
+      </nav>
+      <div class="tools">
+        <button id="fsMinus" title="По-малък шрифт">A−</button>
+        <button id="fsPlus" title="По-голям шрифт">A+</button>
+        <button id="fullBtn" title="Цял екран">⛶</button>
+      </div>
+    </header>
+    <main>
+      <!-- ======================= 1. СИМУЛАТОР ======================= -->
+      <section id="sim" class="on">
+        <div class="grid g2">
+          <div class="grid">
+            <div class="card">
+              <h2>Генерална съвкупност: 200 годишни оценки</h2>
+              <canvas id="popC" height="190"></canvas>
+              <div class="row">
+                <button class="btn" id="revealBtn">Покажи μ и σ²</button>
+                <span id="popPar" class="big m"></span>
+              </div>
+            </div>
+            <div class="card">
+              <h2>Теглене на извадки (без връщане)</h2>
+              <div class="row">
+                <span class="lbl">Обем на извадката n:</span>
+                <button class="btn nsel" data-n="5">5</button>
+                <button class="btn nsel sel" data-n="10">10</button>
+                <button class="btn nsel" data-n="20">20</button>
+              </div>
+              <div class="row">
+                <button class="btn pri" data-k="1">+1 извадка</button>
+                <button class="btn pri" data-k="10">+10</button>
+                <button class="btn pri" data-k="100">+100</button>
+                <button class="btn ghost" id="simClear">Изчисти</button>
+              </div>
+              <h3>Последна извадка</h3>
+              <div class="chips" id="chips">
+                <span class="note">Натиснете „+1 извадка“.</span>
+              </div>
+              <div
+                class="stat m big"
+                id="lastStat"
+                style="margin-top: 0.4em"
+              ></div>
+            </div>
+            <div class="card">
+              <h2>Всички изтеглени извадки</h2>
+              <div class="scroll hist">
+                <table class="t" id="histT"></table>
+              </div>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="card">
+              <h2>Средните аритметични на извадките</h2>
+              <div class="note">
+                <span class="sw" style="background: var(--green-l)"></span>x̄ на
+                всяка извадка &nbsp;
+                <span class="sw" style="background: var(--green)"></span>средно
+                на средните <span class="m">x̿</span> &nbsp;
+                <span class="sw" style="background: #000"></span>μ (когато е
+                показано)
+              </div>
+              <canvas id="meanC" height="250"></canvas>
+            </div>
+            <div class="card">
+              <h2>Средно на оценките за дисперсията</h2>
+              <div class="note">
+                <span class="sw" style="background: var(--orange)"></span>S² (÷
+                n) &nbsp;
+                <span class="sw" style="background: var(--blue)"></span
+                ><span class="m">n/(n−1)·S²</span> (÷ (n−1)) &nbsp;
+                <span class="sw" style="background: #000"></span>σ² (когато е
+                показано)
+              </div>
+              <canvas id="varC" height="250"></canvas>
+            </div>
+            <div class="card">
+              <h2>Обобщение</h2>
+              <div class="stat m big" id="sumStat"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 2. ПРОСТИ ЧИСЛА ======================= -->
+      <section id="pr">
+        <div class="q">
+          Еднаква ли е вероятността да попаднем на просто число във всяка
+          хилядна?
+        </div>
+        <div class="grid g2">
+          <div class="grid">
+            <div class="card">
+              <h2>Изберете хилядна</h2>
+              <div class="row">
+                <span class="lbl">От</span>
+                <input
+                  class="num"
+                  id="prStart"
+                  type="number"
+                  min="1"
+                  step="1000"
+                  value="1"
+                  style="width: 8em"
+                />
+                <span class="lbl">до</span><span id="prEnd" class="big"></span>
+              </div>
+              <div class="row">
+                <button class="btn" id="prPrev">− 1000</button>
+                <button class="btn" id="prNext">+ 1000</button>
+                <button class="btn pri" id="prGo">Преброй</button>
+              </div>
+              <div class="row">
+                <span class="lbl">Бързо:</span>
+                <button class="btn ghost prq" data-s="1">1</button>
+                <button class="btn ghost prq" data-s="1001">1 001</button>
+                <button class="btn ghost prq" data-s="2001">2 001</button>
+                <button class="btn ghost prq" data-s="10001">10 001</button>
+                <button class="btn ghost prq" data-s="100001">100 001</button>
+                <button class="btn ghost prq" data-s="1000001">
+                  1 000 001
+                </button>
+                <button class="btn ghost prq" data-s="999999001">
+                  999 999 001
+                </button>
+              </div>
+            </div>
+            <div class="card">
+              <h2>Резултат</h2>
+              <div class="scroll"><table class="t" id="prT"></table></div>
+              <div
+                class="stat m big"
+                id="prStat"
+                style="margin-top: 0.5em"
+              ></div>
+            </div>
+            <div class="card">
+              <h2>Разгледани хилядни</h2>
+              <div class="scroll hist">
+                <table class="t" id="prHist"></table>
+              </div>
+              <div class="row">
+                <button class="btn ghost" id="prHistClear">
+                  Изчисти списъка
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="card">
+              <h2>Брой прости числа по стотици</h2>
+              <canvas id="prBar" height="260"></canvas>
+            </div>
+            <div class="card">
+              <h2>Дял на простите числа в първите 20 хилядни</h2>
+              <div class="row">
+                <button class="btn" id="pr20">Покажи</button>
+              </div>
+              <canvas id="prLine" height="260"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 3. ТАБЛИЦА ======================= -->
+      <section id="tab">
+        <div class="grid g2">
+          <div class="grid">
+            <div class="card">
+              <h2>Данни</h2>
+              <div class="row"><select id="preset"></select></div>
+              <div
+                id="presetNote"
+                class="note"
+                style="margin: 0.2em 0 0.5em"
+              ></div>
+              <div class="scroll"><table class="t ed" id="edT"></table></div>
+              <div class="row">
+                <button class="btn" id="addRow">+ ред</button>
+                <button class="btn ghost" id="clrRows">Изчисти</button>
+              </div>
+            </div>
+            <div class="card">
+              <h2>Дял (статистическа вероятност)</h2>
+              <div class="row">
+                <span class="lbl">Стойности</span>
+                <select id="shOp">
+                  <option value="le">≤</option>
+                  <option value="lt">&lt;</option>
+                  <option value="eq">=</option>
+                  <option value="ge">≥</option>
+                  <option value="gt">&gt;</option>
+                </select>
+                <input
+                  class="num"
+                  id="shVal"
+                  type="number"
+                  step="any"
+                  value="1"
+                />
+              </div>
+              <div class="m big" id="shRes"></div>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="card">
+              <h2>Изчислителна таблица</h2>
+              <div class="row">
+                <button class="btn" id="tgDev">Колони с отклонения</button>
+                <button class="btn" id="tgHide">Скрий сметките</button>
+              </div>
+              <div class="scroll"><table class="t" id="calcT"></table></div>
+            </div>
+            <div class="card res">
+              <h2>Характеристики</h2>
+              <div id="resBox" class="m big"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 4. ТЕОРИЯ ======================= -->
+      <section id="th">
+        <div class="theory">
+          <div class="card">
+            <h2>
+              Урок 9. Намиране на приближения на мерките на генералната
+              съвкупност чрез извадки
+            </h2>
+            <p>
+              <b>Генерална съвкупност</b> – всички обекти (статистически
+              единици), които изследваме. Често обемът ѝ е много голям или
+              безкраен, а пълното изследване е невъзможно, скъпо или разрушава
+              обектите. Затова изследваме извадка.
+            </p>
+            <p>
+              <b>Извадка</b> – всяко непразно подмножество на генералната
+              съвкупност. Броят <span class="m"><i>n</i></span> на елементите ѝ
+              е <b>обем на извадката</b>. Стойностите
+              <span class="m"
+                ><i>x</i><sub>1</sub>, <i>x</i><sub>2</sub>, …,
+                <i>x<sub>n</sub></i></span
+              >
+              образуват статистическия ред на извадката.
+            </p>
+            <p>
+              <b>Случайна извадка</b> – всеки елемент на генералната съвкупност
+              има еднаква вероятност да попадне в нея.
+            </p>
+            <p>
+              <b>Представителна (репрезентативна) извадка</b> – позволява
+              достоверни изводи за генералната съвкупност: тя е случайна и
+              притежава приблизително всички нейни особености. Големият обем
+              <b>не гарантира</b> представителност – решаващ е начинът на избор.
+            </p>
+            <h3>Начини за избор на представителна извадка</h3>
+            <ul>
+              <li>
+                <b>случаен</b> – генералната съвкупност се разделя на групи по
+                случаен начин;
+              </li>
+              <li>
+                <b>систематичен</b> – от всяка група по случаен принцип се
+                избира по един представител;
+              </li>
+              <li>
+                <b>типичен</b> – съвкупността се разделя на типични групи по
+                някакъв признак и от всяка група случайно се избира определен
+                брой представители;
+              </li>
+              <li>
+                <b>сериен</b> – например от всеки определен брой произведени
+                бройки се избира по една за проверка.
+              </li>
+            </ul>
+            <p>
+              Елементите се избират <b>без връщане</b> (избраният не може да
+              бъде избран отново) или <b>с връщане</b>.
+            </p>
+            <h3>Параметри и оценки</h3>
+            <p>
+              Мерките на генералната съвкупност (<span class="m"
+                ><i>μ</i>, <i>σ</i><sup>2</sup></span
+              >) обикновено са неизвестни. Пресмятаме мерките на извадката
+              (<span class="m"
+                ><span class="ov"><i>x</i></span
+                >, <i>S</i><sup>2</sup></span
+              >) и ги използваме като <b>оценки</b>. Мерките на извадката са
+              случайни величини – друга извадка дава други стойности.
+            </p>
+
+            <div class="fbox">
+              <b>Извадково средно аритметично</b>
+              <div class="fm m">
+                <span class="ov"><i>x</i></span> =
+                <span class="frac"
+                  ><span>1</span><span><i>n</i></span></span
+                ><span class="sg"
+                  ><small><i>n</i></small
+                  ><b>∑</b><small><i>i</i>=1</small></span
+                ><i>x<sub>i</sub></i>
+                &nbsp;&nbsp;&nbsp; по честотна таблица: &nbsp;
+                <span class="ov"><i>x</i></span> =
+                <span class="frac"
+                  ><span>1</span><span><i>n</i></span></span
+                >∑ <i>x<sub>i</sub> f<sub>i</sub></i
+                >, &nbsp; <i>n</i> = ∑ <i>f<sub>i</sub></i>
+              </div>
+              <div>
+                Свойство:
+                <span class="m"
+                  >∑ (<i>x<sub>i</sub></i> − <span class="ov"><i>x</i></span
+                  >) = 0</span
+                >. Недостатък: една силно отклоняваща се стойност го „измества“.
+              </div>
+            </div>
+            <div class="fbox">
+              <b
+                >Извадкова медиана
+                <span class="m"
+                  ><i>M<sub>d</sub></i></span
+                ></b
+              >
+              – средният член на подредения статистически ред (при нечетно
+              <span class="m"><i>n</i></span
+              >) или средното аритметично на двата средни члена (при четно
+              <span class="m"><i>n</i></span
+              >). Позиция:
+              <span class="m"
+                ><span class="frac"
+                  ><span><i>n</i> + 1</span><span>2</span></span
+                ></span
+              >. При силно отклоняващи се стойности медианата е по-добра
+              „средна“ характеристика.
+            </div>
+            <div class="fbox">
+              <b
+                >Извадкова мода
+                <span class="m"
+                  ><i>M<sub>o</sub></i></span
+                ></b
+              >
+              – стойността с най-голяма честота. Извадката може да няма мода, да
+              има една или повече. При повече от една мода казваме, че
+              <b>данните не са хомогенни</b>.
+            </div>
+            <div class="fbox">
+              <b
+                >Дисперсия на извадката и оценка на дисперсията
+                <span class="m"><i>σ</i><sup>2</sup></span></b
+              >
+              <div class="fm m">
+                <i>S</i><sup>2</sup> =
+                <span class="frac"
+                  ><span>1</span><span><i>n</i></span></span
+                >∑ (<i>x<sub>i</sub></i> − <span class="ov"><i>x</i></span
+                >)<sup>2</sup><i>f<sub>i</sub></i> &nbsp;&nbsp; = &nbsp;<span
+                  class="frac"
+                  ><span>1</span><span><i>n</i></span></span
+                >∑ <i>x<sub>i</sub></i
+                ><sup>2</sup><i>f<sub>i</sub></i> −
+                <span class="ov"><i>x</i></span
+                ><sup>2</sup> &nbsp;&nbsp;&nbsp; <i>S</i> = √<i>S</i
+                ><sup>2</sup>
+              </div>
+              <div class="fm m">
+                <i>σ</i><sup>2</sup> ≈
+                <span class="frac"
+                  ><span><i>n</i></span
+                  ><span><i>n</i> − 1</span></span
+                ><i>S</i><sup>2</sup> =
+                <span class="frac"
+                  ><span>1</span><span><i>n</i> − 1</span></span
+                >∑ (<i>x<sub>i</sub></i> − <span class="ov"><i>x</i></span
+                >)<sup>2</sup><i>f<sub>i</sub></i>
+              </div>
+              <div>
+                <span class="m"><i>S</i><sup>2</sup></span> средно е по-малко от
+                <span class="m"><i>σ</i><sup>2</sup></span> – около
+                <span class="m"
+                  ><span class="frac"
+                    ><span><i>n</i> − 1</span><span><i>n</i></span></span
+                  ></span
+                >
+                от него (вижте раздела „Симулатор“). Затова при малко
+                <span class="m"><i>n</i></span> оценяваме
+                <span class="m"><i>σ</i><sup>2</sup></span> с делител
+                <span class="m"><i>n</i> − 1</span>.
+              </div>
+            </div>
+            <div class="fbox">
+              <b
+                >Неизместена оценка на средното аритметично на генералната
+                съвкупност</b
+              >
+              – от <span class="m"><i>k</i></span> независими случайни извадки с
+              еднакъв обем и средни
+              <span class="m"
+                ><span class="ov"><i>x</i></span
+                ><sub>1</sub>, …, <span class="ov"><i>x</i></span
+                ><sub><i>k</i></sub></span
+              >:
+              <div class="fm m">
+                <span class="ov2"><i>x</i></span> =
+                <span class="frac"
+                  ><span
+                    ><span class="ov"><i>x</i></span
+                    ><sub>1</sub> + <span class="ov"><i>x</i></span
+                    ><sub>2</sub> + … + <span class="ov"><i>x</i></span
+                    ><sub><i>k</i></sub></span
+                  ><span><i>k</i></span></span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>
+              Урок 10. Оценяване на неизвестен дял в генерална съвкупност чрез
+              извадки
+            </h2>
+            <p>
+              Събитието <span class="m"><i>A</i></span> има неизвестна
+              вероятност <span class="m"><i>P</i>(<i>A</i>) = <i>p</i></span
+              >. Генералната съвкупност са всички възможни опити, а проведените
+              <span class="m"><i>n</i></span> опита са извадка от нея.
+            </p>
+            <div class="fbox">
+              <b>Закон за големите числа:</b> ако при
+              <span class="m"><i>n</i></span> опита събитието
+              <span class="m"><i>A</i></span> се е случило
+              <span class="m"><i>k</i></span> пъти, то при достатъчно голямо
+              <span class="m"><i>n</i></span>
+              <div class="fm m">
+                <i>p</i> ≈
+                <span class="frac"
+                  ><span><i>k</i></span
+                  ><span><i>n</i></span></span
+                >
+              </div>
+              При няколко извадки можем да ги обединим:
+              <span class="m"
+                ><i>p</i> ≈
+                <span class="frac"
+                  ><span
+                    ><i>k</i><sub>1</sub> + <i>k</i><sub>2</sub> + … +
+                    <i>k<sub>m</sub></i></span
+                  ><span
+                    ><i>n</i><sub>1</sub> + <i>n</i><sub>2</sub> + … +
+                    <i>n<sub>m</sub></i></span
+                  ></span
+                ></span
+              >.
+            </div>
+            <p>
+              Точността на оценката зависи преди всичко от това доколко
+              извадката е <b>представителна</b>.
+            </p>
+            <div class="q">
+              <b>Пример (1936 г.).</b> Списание „Литературен преглед“ анкетира
+              около 4 милиона души, избрани от телефонните указатели, и
+              прогнозира победа на Ландън на президентските избори в САЩ. По
+              онова време телефон имаха главно заможните семейства. Социолозите
+              Галъп и Роупър, с около 5000 анкети, обхващащи различните социални
+              групи, правилно предсказаха победата на Рузвелт.
+            </div>
+          </div>
+          <p class="note" style="text-align: center">
+            По учебника, уроци 9 и 10 (с. 54–64).
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        "use strict";
+        /* ---------- общи ---------- */
+        var LS = {
+          get: function (k) {
+            try {
+              return localStorage.getItem(k);
+            } catch (e) {
+              return null;
+            }
+          },
+          set: function (k, v) {
+            try {
+              localStorage.setItem(k, v);
+            } catch (e) {}
+          },
+        };
+        function $(id) {
+          return document.getElementById(id);
+        }
+        function fmtNum(x, d) {
+          if (d === undefined) d = 4;
+          if (!isFinite(x)) return "—";
+          var r = Math.round(x * Math.pow(10, d)) / Math.pow(10, d);
+          var s = String(r);
+          if (s.indexOf("e") >= 0) s = r.toFixed(d);
+          return s.replace(".", ",").replace("-", "−");
+        }
+        function fmtA(x, d) {
+          // с ≈ при закръгляне
+          if (d === undefined) d = 4;
+          var r = Math.round(x * Math.pow(10, d)) / Math.pow(10, d);
+          return (Math.abs(r - x) > 1e-12 ? "≈ " : "= ") + fmtNum(x, d);
+        }
+        function sep(n) {
+          return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "\u00a0");
+        }
+        function frac(a, b) {
+          return (
+            '<span class="frac"><span>' +
+            a +
+            "</span><span>" +
+            b +
+            "</span></span>"
+          );
+        }
+        var XB = '<span class="ov"><i>x</i></span>',
+          XBB = '<span class="ov2"><i>x</i></span>';
+
+        /* шрифт и цял екран */
+        var fs = parseFloat(LS.get("fs")) || 20;
+        function applyFs() {
+          document.documentElement.style.setProperty("--fs", fs + "px");
+          LS.set("fs", fs);
+          setTimeout(redrawAll, 30);
+        }
+        $("fsMinus").onclick = function () {
+          fs = Math.max(13, fs - 2);
+          applyFs();
+        };
+        $("fsPlus").onclick = function () {
+          fs = Math.min(34, fs + 2);
+          applyFs();
+        };
+        $("fullBtn").onclick = function () {
+          try {
+            if (
+              !document.fullscreenElement &&
+              !document.webkitFullscreenElement
+            ) {
+              var el = document.documentElement;
+              (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+            } else {
+              (document.exitFullscreen || document.webkitExitFullscreen).call(
+                document,
+              );
+            }
+          } catch (e) {}
+        };
+        applyFs();
+
+        /* табове */
+        var tabBtns = document.querySelectorAll(".tabs button");
+        for (var i = 0; i < tabBtns.length; i++)
+          tabBtns[i].onclick = function () {
+            for (var j = 0; j < tabBtns.length; j++)
+              tabBtns[j].classList.remove("on");
+            this.classList.add("on");
+            var secs = document.querySelectorAll("section");
+            for (var j = 0; j < secs.length; j++)
+              secs[j].classList.remove("on");
+            $(this.getAttribute("data-t")).classList.add("on");
+            redrawAll();
+          };
+
+        /* ---------- графики ---------- */
+        function prep(c) {
+          var dpr = window.devicePixelRatio || 1;
+          var w = c.clientWidth || 600,
+            h = (parseFloat(c.getAttribute("height")) * fs) / 20;
+          c.style.height = h + "px";
+          c.width = Math.round(w * dpr);
+          c.height = Math.round(h * dpr);
+          var g = c.getContext("2d");
+          g.setTransform(dpr, 0, 0, dpr, 0, 0);
+          g.clearRect(0, 0, w, h);
+          return { g: g, w: w, h: h };
+        }
+        function font(px, bold) {
+          return (
+            (bold ? "600 " : "") +
+            Math.round((px * fs) / 20) +
+            'px "Segoe UI",Roboto,Arial,sans-serif'
+          );
+        }
+        function niceTicks(a, b, n) {
+          var span = b - a,
+            step = Math.pow(10, Math.floor(Math.log(span / n) / Math.LN10)),
+            err = span / n / step;
+          if (err >= 7.5) step *= 10;
+          else if (err >= 3.5) step *= 5;
+          else if (err >= 1.5) step *= 2;
+          var t = [];
+          for (var v = Math.ceil(a / step) * step; v <= b + 1e-9; v += step)
+            t.push(Math.round(v / step) * step);
+          return t;
+        }
+        function lineChart(c, o) {
+          var P = prep(c),
+            g = P.g,
+            w = P.w,
+            h = P.h;
+          var L = Math.round((58 * fs) / 20),
+            R = 14,
+            T = 12,
+            B = Math.round((34 * fs) / 20);
+          var xmax = Math.max(o.xmax || 1, 1),
+            x0 = o.xmin || 0;
+          function X(v) {
+            return L + ((v - x0) / (xmax - x0 || 1)) * (w - L - R);
+          }
+          function Y(v) {
+            return T + ((o.ymax - v) / (o.ymax - o.ymin)) * (h - T - B);
+          }
+          g.strokeStyle = "#d9dce1";
+          g.lineWidth = 1;
+          g.fillStyle = "#5b616b";
+          g.font = font(14);
+          g.textAlign = "right";
+          g.textBaseline = "middle";
+          niceTicks(o.ymin, o.ymax, 5).forEach(function (t) {
+            g.beginPath();
+            g.moveTo(L, Y(t));
+            g.lineTo(w - R, Y(t));
+            g.stroke();
+            g.fillText(fmtNum(t, 3), L - 6, Y(t));
+          });
+          g.textAlign = "center";
+          g.textBaseline = "top";
+          var xt =
+            o.xticks ||
+            niceTicks(x0, xmax, 8).filter(function (t) {
+              return t >= 1 && t === Math.round(t);
+            });
+          xt.forEach(function (t) {
+            g.fillText(o.xfmt ? o.xfmt(t) : String(t), X(t), h - B + 6);
+          });
+          g.strokeStyle = "#5b616b";
+          g.beginPath();
+          g.moveTo(L, T);
+          g.lineTo(L, h - B);
+          g.lineTo(w - R, h - B);
+          g.stroke();
+          if (o.xlabel) {
+            g.textAlign = "right";
+            g.fillText(
+              o.xlabel,
+              w - R,
+              h - B + 6 + Math.round((15 * fs) / 20) > h - 14
+                ? h - B - 18
+                : h - B + 6,
+            );
+          }
+          (o.hlines || []).forEach(function (hl) {
+            g.save();
+            g.strokeStyle = hl.color;
+            g.lineWidth = 2.5;
+            g.setLineDash([9, 6]);
+            g.beginPath();
+            g.moveTo(L, Y(hl.y));
+            g.lineTo(w - R, Y(hl.y));
+            g.stroke();
+            g.restore();
+            g.font = font(15, true);
+            g.textAlign = "left";
+            g.textBaseline = "bottom";
+            var tw = g.measureText(hl.label).width;
+            g.fillStyle = "rgba(255,255,255,.85)";
+            g.fillRect(
+              L + 4,
+              Y(hl.y) - 3 - Math.round((18 * fs) / 20),
+              tw + 8,
+              Math.round((18 * fs) / 20),
+            );
+            g.fillStyle = hl.color;
+            g.fillText(hl.label, L + 8, Y(hl.y) - 3);
+          });
+          (o.series || []).forEach(function (s) {
+            var pts = s.points;
+            if (!pts.length) return;
+            if (s.dots) {
+              g.fillStyle = s.color;
+              var r = s.r || 4;
+              pts.forEach(function (p) {
+                g.beginPath();
+                g.arc(X(p[0]), Y(p[1]), r, 0, 7);
+                g.fill();
+              });
+            }
+            if (s.line !== false) {
+              g.strokeStyle = s.color;
+              g.lineWidth = s.width || 3;
+              g.setLineDash([]);
+              g.beginPath();
+              pts.forEach(function (p, i) {
+                i ? g.lineTo(X(p[0]), Y(p[1])) : g.moveTo(X(p[0]), Y(p[1]));
+              });
+              g.stroke();
+              if (pts.length === 1) {
+                g.fillStyle = s.color;
+                g.beginPath();
+                g.arc(X(pts[0][0]), Y(pts[0][1]), 4, 0, 7);
+                g.fill();
+              }
+            }
+          });
+          if (o.empty) {
+            g.fillStyle = "#9aa0a8";
+            g.font = font(17);
+            g.textAlign = "center";
+            g.textBaseline = "middle";
+            g.fillText(o.empty, (L + w) / 2, (T + h - B) / 2);
+          }
+        }
+        function barChart(c, labels, vals, o) {
+          o = o || {};
+          var P = prep(c),
+            g = P.g,
+            w = P.w,
+            h = P.h;
+          var L = Math.round((44 * fs) / 20),
+            R = 10,
+            T = Math.round((26 * fs) / 20),
+            B = Math.round((30 * fs) / 20);
+          var ymax = o.ymax || Math.max.apply(null, vals.concat([1]));
+          var n = vals.length,
+            bw = (w - L - R) / n;
+          g.strokeStyle = "#d9dce1";
+          g.lineWidth = 1;
+          g.fillStyle = "#5b616b";
+          g.font = font(14);
+          g.textAlign = "right";
+          g.textBaseline = "middle";
+          niceTicks(0, ymax, 4).forEach(function (t) {
+            var y = T + (1 - t / ymax) * (h - T - B);
+            g.beginPath();
+            g.moveTo(L, y);
+            g.lineTo(w - R, y);
+            g.stroke();
+            g.fillText(fmtNum(t), L - 6, y);
+          });
+          for (var i = 0; i < n; i++) {
+            var bh = (vals[i] / ymax) * (h - T - B),
+              x = L + i * bw + bw * 0.14,
+              y = h - B - bh;
+            g.fillStyle = (o.colors && o.colors[i]) || o.color || "#1f8a52";
+            g.fillRect(x, y, bw * 0.72, bh);
+            g.fillStyle = "#15171a";
+            g.font = font(16, true);
+            g.textAlign = "center";
+            g.textBaseline = "bottom";
+            g.fillText(fmtNum(vals[i]), x + bw * 0.36, y - 2);
+            g.fillStyle = "#5b616b";
+            g.font = font(15);
+            g.textBaseline = "top";
+            g.fillText(labels[i], x + bw * 0.36, h - B + 6);
+          }
+          if (o.mark !== undefined) {
+            // вертикална линия за μ
+            var xm = L + o.mark.pos * bw;
+            g.save();
+            g.strokeStyle = "#000";
+            g.lineWidth = 2.5;
+            g.setLineDash([8, 6]);
+            g.beginPath();
+            g.moveTo(xm, T - 6);
+            g.lineTo(xm, h - B);
+            g.stroke();
+            g.restore();
+            g.fillStyle = "#000";
+            g.font = font(15, true);
+            g.textAlign = "left";
+            g.textBaseline = "top";
+            g.fillText(o.mark.label, xm + 5, 2);
+          }
+          g.strokeStyle = "#5b616b";
+          g.beginPath();
+          g.moveTo(L, h - B);
+          g.lineTo(w - R, h - B);
+          g.stroke();
+        }
+
+        /* ============ 1. СИМУЛАТОР ============ */
+        var POP_GR = [2, 3, 4, 5, 6],
+          POP_CNT = [14, 36, 60, 56, 34];
+        var POP = [];
+        POP_GR.forEach(function (v, i) {
+          for (var k = 0; k < POP_CNT[i]; k++) POP.push(v);
+        });
+        var MU =
+          POP.reduce(function (a, b) {
+            return a + b;
+          }, 0) / POP.length;
+        var SIG2 =
+          POP.reduce(function (a, b) {
+            return a + (b - MU) * (b - MU);
+          }, 0) / POP.length;
+        var sim = { n: 10, samples: [], shown: false };
+        function drawSample(n) {
+          var idx = POP.map(function (_, i) {
+              return i;
+            }),
+            out = [];
+          for (var i = 0; i < n; i++) {
+            var j = i + Math.floor(Math.random() * (idx.length - i));
+            var t = idx[i];
+            idx[i] = idx[j];
+            idx[j] = t;
+            out.push(POP[idx[i]]);
+          }
+          var m =
+              out.reduce(function (a, b) {
+                return a + b;
+              }, 0) / n,
+            ss = out.reduce(function (a, b) {
+              return a + (b - m) * (b - m);
+            }, 0);
+          return { v: out, m: m, s2: ss / n, s21: ss / (n - 1) };
+        }
+        function simAdd(k) {
+          for (var i = 0; i < k; i++) sim.samples.push(drawSample(sim.n));
+          simRender();
+        }
+        function simRender() {
+          var S = sim.samples,
+            k = S.length,
+            n = sim.n;
+          // параметри
+          $("revealBtn").textContent = sim.shown
+            ? "Скрий μ и σ²"
+            : "Покажи μ и σ²";
+          $("popPar").innerHTML = sim.shown
+            ? "<i>μ</i> = " +
+              fmtNum(MU) +
+              " &nbsp;&nbsp; <i>σ</i><sup>2</sup> = " +
+              fmtNum(SIG2)
+            : '<span class="note">μ и σ² са скрити</span>';
+          // последна
+          if (k) {
+            var last = S[k - 1];
+            $("chips").innerHTML = last.v
+              .map(function (x) {
+                return '<span class="chip">' + x + "</span>";
+              })
+              .join("");
+            $("lastStat").innerHTML =
+              "<span>" +
+              XB +
+              '</span><span class="v c-g">' +
+              fmtA(last.m) +
+              "</span>" +
+              '<span><i>S</i><sup>2</sup> (÷ <i>n</i>)</span><span class="v c-n">' +
+              fmtA(last.s2) +
+              "</span>" +
+              "<span>" +
+              frac("<i>n</i>", "<i>n</i>−1") +
+              '<i>S</i><sup>2</sup> (÷ (<i>n</i>−1))</span><span class="v c-n1">' +
+              fmtA(last.s21) +
+              "</span>";
+          } else {
+            $("chips").innerHTML =
+              '<span class="note">Натиснете „+1 извадка“.</span>';
+            $("lastStat").innerHTML = "";
+          }
+          // история
+          var h =
+            "<tr><th>№</th><th>" +
+            XB.replace('class="ov"', 'class="ov m"') +
+            '</th><th class="c-n">S² (÷ n)</th><th class="c-n1">S² (÷ (n−1))</th></tr>';
+          for (var i = k - 1; i >= Math.max(0, k - 300); i--)
+            h +=
+              "<tr><td>" +
+              (i + 1) +
+              "</td><td>" +
+              fmtNum(S[i].m) +
+              "</td><td>" +
+              fmtNum(S[i].s2) +
+              "</td><td>" +
+              fmtNum(S[i].s21) +
+              "</td></tr>";
+          if (k > 300)
+            h +=
+              '<tr><td colspan="4" class="note">показани са последните 300</td></tr>';
+          $("histT").innerHTML = h;
+          // обобщение
+          var mm = 0,
+            a = 0,
+            b = 0;
+          S.forEach(function (s) {
+            mm += s.m;
+            a += s.s2;
+            b += s.s21;
+          });
+          if (k) {
+            mm /= k;
+            a /= k;
+            b /= k;
+          }
+          var sh =
+            '<span>Брой извадки <i>k</i></span><span class="v">' +
+            k +
+            "</span>" +
+            "<span>Средно на средните " +
+            XBB +
+            '</span><span class="v c-g">' +
+            (k ? fmtA(mm) : "—") +
+            "</span>";
+          if (sim.shown)
+            sh +=
+              '<span><i>μ</i></span><span class="v">= ' +
+              fmtNum(MU) +
+              "</span>";
+          sh +=
+            '<span>Средно на <i>S</i><sup>2</sup> (÷ <i>n</i>)</span><span class="v c-n">' +
+            (k ? fmtA(a) : "—") +
+            "</span>" +
+            "<span>Средно на " +
+            frac("<i>n</i>", "<i>n</i>−1") +
+            '<i>S</i><sup>2</sup></span><span class="v c-n1">' +
+            (k ? fmtA(b) : "—") +
+            "</span>";
+          if (sim.shown)
+            sh +=
+              '<span><i>σ</i><sup>2</sup></span><span class="v">= ' +
+              fmtNum(SIG2) +
+              "</span>" +
+              "<span>" +
+              frac("<i>n</i>−1", "<i>n</i>") +
+              "<i>σ</i><sup>2</sup> = " +
+              frac(n - 1, n) +
+              "·" +
+              fmtNum(SIG2) +
+              '</span><span class="v c-n">' +
+              fmtA(((n - 1) / n) * SIG2) +
+              "</span>";
+          $("sumStat").innerHTML = sh;
+          simCharts();
+        }
+        function simCharts() {
+          var S = sim.samples,
+            k = S.length;
+          barChart($("popC"), POP_GR.map(String), POP_CNT, {
+            color: "#7fbf9a",
+            ymax: 70,
+            mark: sim.shown
+              ? { pos: MU - 2 + 0.5, label: "μ = " + fmtNum(MU) }
+              : undefined,
+          });
+          var dots = [],
+            run = [],
+            ra = [],
+            rb = [],
+            sm = 0,
+            sa = 0,
+            sb = 0,
+            ymaxV = 2;
+          S.forEach(function (s, i) {
+            sm += s.m;
+            sa += s.s2;
+            sb += s.s21;
+            dots.push([i + 1, s.m]);
+            run.push([i + 1, sm / (i + 1)]);
+            ra.push([i + 1, sa / (i + 1)]);
+            rb.push([i + 1, sb / (i + 1)]);
+            ymaxV = Math.max(ymaxV, sb / (i + 1));
+          });
+          var xm = Math.max(10, k);
+          lineChart($("meanC"), {
+            xmin: 0,
+            xmax: xm,
+            ymin: 2,
+            ymax: 6,
+            xlabel: "№ на извадката",
+            hlines: sim.shown
+              ? [{ y: MU, color: "#000", label: "μ = " + fmtNum(MU) }]
+              : [],
+            series: [
+              {
+                points: dots,
+                color: "#9fd6b6",
+                dots: true,
+                line: false,
+                r: k > 150 ? 2.5 : 4.5,
+              },
+              { points: run, color: "#1f8a52", width: 3.5 },
+            ],
+            empty: k ? null : "Още няма изтеглени извадки",
+          });
+          lineChart($("varC"), {
+            xmin: 0,
+            xmax: xm,
+            ymin: 0,
+            ymax: Math.ceil(ymaxV * 1.15 * 2) / 2,
+            xlabel: "брой извадки",
+            hlines: sim.shown
+              ? [{ y: SIG2, color: "#000", label: "σ² = " + fmtNum(SIG2) }]
+              : [],
+            series: [
+              { points: ra, color: "#e07000", width: 3.5 },
+              { points: rb, color: "#1d63c9", width: 3.5 },
+            ],
+            empty: k ? null : "Още няма изтеглени извадки",
+          });
+        }
+        var nb = document.querySelectorAll(".nsel");
+        for (var i = 0; i < nb.length; i++)
+          nb[i].onclick = function () {
+            var n = +this.getAttribute("data-n");
+            if (n === sim.n) return;
+            if (
+              sim.samples.length &&
+              !confirm(
+                "При смяна на обема изтеглените извадки се изчистват. Продължаване?",
+              )
+            )
+              return;
+            sim.n = n;
+            sim.samples = [];
+            for (var j = 0; j < nb.length; j++)
+              nb[j].classList.toggle("sel", nb[j] === this);
+            simRender();
+          };
+        var kb = document.querySelectorAll("[data-k]");
+        for (var i = 0; i < kb.length; i++)
+          kb[i].onclick = function () {
+            simAdd(+this.getAttribute("data-k"));
+          };
+        $("simClear").onclick = function () {
+          sim.samples = [];
+          simRender();
+        };
+        $("revealBtn").onclick = function () {
+          sim.shown = !sim.shown;
+          simRender();
+        };
+
+        /* ============ 2. ПРОСТИ ЧИСЛА ============ */
+        var SP = (function () {
+          var N = 31623,
+            s = new Uint8Array(N + 1),
+            p = [];
+          for (var i = 2; i <= N; i++) {
+            if (!s[i]) {
+              p.push(i);
+              for (var j = i * i; j <= N; j += i) s[j] = 1;
+            }
+          }
+          return p;
+        })();
+        function isPrime(x) {
+          if (x < 2) return false;
+          for (var i = 0; i < SP.length; i++) {
+            var p = SP[i];
+            if (p * p > x) return true;
+            if (x % p === 0) return x === p;
+          }
+          return true;
+        }
+        function countBlock(a) {
+          var c = [];
+          for (var g = 0; g < 10; g++) {
+            var k = 0;
+            for (var x = a + g * 100; x < a + g * 100 + 100; x++)
+              if (isPrime(x)) k++;
+            c.push(k);
+          }
+          return c;
+        }
+        var prHist = [];
+        function prStart() {
+          var v = Math.floor(+$("prStart").value || 1);
+          v = Math.max(1, Math.min(999999001, v));
+          $("prStart").value = v;
+          return v;
+        }
+        function prShowEnd() {
+          $("prEnd").textContent = sep(prStart() + 999);
+        }
+        var prLast = null;
+        function prRun() {
+          var a = prStart();
+          prShowEnd();
+          var c = countBlock(a),
+            k = c.reduce(function (x, y) {
+              return x + y;
+            }, 0);
+          prLast = { a: a, c: c };
+          var m = k / 10,
+            ss = c.reduce(function (s, v) {
+              return s + (v - m) * (v - m);
+            }, 0);
+          var h = "<tr><th>Група</th>";
+          for (var g = 0; g < 10; g++)
+            h +=
+              '<th style="white-space:nowrap">' +
+              sep(a + g * 100) +
+              "<br>–<br>" +
+              sep(a + g * 100 + 99) +
+              "</th>";
+          h +=
+            "</tr><tr><th>Брой</th>" +
+            c
+              .map(function (v) {
+                return "<td><b>" + v + "</b></td>";
+              })
+              .join("") +
+            "</tr>";
+          $("prT").innerHTML = h;
+          $("prStat").innerHTML =
+            '<span>Прости числа <i>k</i></span><span class="v c-g">' +
+            k +
+            "</span>" +
+            "<span>Дял <i>p</i> ≈ " +
+            frac("<i>k</i>", "1000") +
+            '</span><span class="v c-p">' +
+            fmtA(k / 1000) +
+            "</span>" +
+            "<span>Средно по стотици " +
+            XB +
+            '</span><span class="v">' +
+            fmtA(m) +
+            "</span>" +
+            '<span><i>S</i><sup>2</sup> (÷ <i>n</i>)</span><span class="v c-n">' +
+            fmtA(ss / 10) +
+            "</span>" +
+            "<span>" +
+            frac("<i>n</i>", "<i>n</i>−1") +
+            '<i>S</i><sup>2</sup></span><span class="v c-n1">' +
+            fmtA(ss / 9) +
+            "</span>";
+          if (
+            !prHist.some(function (r) {
+              return r.a === a;
+            })
+          )
+            prHist.push({ a: a, k: k });
+          prHistRender();
+          prBarDraw();
+        }
+        function prHistRender() {
+          var rows = prHist.slice().sort(function (x, y) {
+            return x.a - y.a;
+          });
+          var h =
+            "<tr><th>Хилядна</th><th>Брой <i>k</i></th><th>Дял <i>k</i>/1000</th></tr>";
+          rows.forEach(function (r) {
+            h +=
+              "<tr><td>" +
+              sep(r.a) +
+              " – " +
+              sep(r.a + 999) +
+              "</td><td>" +
+              r.k +
+              "</td><td>" +
+              fmtNum(r.k / 1000, 3) +
+              "</td></tr>";
+          });
+          if (rows.length > 1) {
+            var K = 0;
+            rows.forEach(function (r) {
+              K += r.k;
+            });
+            h +=
+              '<tr class="sum"><td>Общо (' +
+              sep(rows.length * 1000) +
+              " числа)</td><td>" +
+              K +
+              "</td><td>" +
+              fmtA(K / (rows.length * 1000), 4) +
+              "</td></tr>";
+          }
+          $("prHist").innerHTML = h;
+        }
+        function prBarDraw() {
+          if (!prLast) {
+            barChart(
+              $("prBar"),
+              ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              { ymax: 30 },
+            );
+            return;
+          }
+          barChart(
+            $("prBar"),
+            ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+            prLast.c,
+            {
+              ymax: Math.max(30, Math.max.apply(null, prLast.c) + 3),
+              color: "#7a3fb8",
+            },
+          );
+        }
+        var pr20 = null;
+        function pr20Draw() {
+          if (!pr20) {
+            lineChart($("prLine"), {
+              xmin: 0,
+              xmax: 20,
+              ymin: 0,
+              ymax: 0.2,
+              xticks: [1, 5, 10, 15, 20],
+              empty: "Натиснете „Покажи“",
+            });
+            return;
+          }
+          lineChart($("prLine"), {
+            xmin: 0,
+            xmax: 20.5,
+            ymin: 0,
+            ymax: 0.2,
+            xticks: [1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20],
+            xlabel: "хилядна",
+            series: [
+              { points: pr20, color: "#7a3fb8", width: 3, dots: true, r: 5 },
+            ],
+          });
+        }
+        $("pr20").onclick = function () {
+          pr20 = [];
+          for (var t = 0; t < 20; t++) {
+            var c = countBlock(t * 1000 + 1);
+            pr20.push([
+              t + 1,
+              c.reduce(function (a, b) {
+                return a + b;
+              }, 0) / 1000,
+            ]);
+          }
+          pr20Draw();
+        };
+        $("prPrev").onclick = function () {
+          $("prStart").value = Math.max(1, prStart() - 1000);
+          prRun();
+        };
+        $("prNext").onclick = function () {
+          $("prStart").value = Math.min(999999001, prStart() + 1000);
+          prRun();
+        };
+        $("prGo").onclick = prRun;
+        $("prStart").onchange = prShowEnd;
+        var q = document.querySelectorAll(".prq");
+        for (var i = 0; i < q.length; i++)
+          q[i].onclick = function () {
+            $("prStart").value = this.getAttribute("data-s");
+            prRun();
+          };
+        $("prHistClear").onclick = function () {
+          prHist = [];
+          prHistRender();
+        };
+
+        /* ============ 3. ТАБЛИЦА ============ */
+        var PRESETS = [
+          { t: "Празна таблица", x: [], f: [] },
+          {
+            t: "с. 59, зад. 4 – брой бракове (n = 30)",
+            x: [0, 1, 2, 3, 4],
+            f: [6, 13, 5, 2, 4],
+            note: "Честотна таблица на данните от задачата.",
+            sh: ["ge", 2],
+          },
+          {
+            t: "с. 59, зад. 6 – олимпиада, точки",
+            x: [12, 13, 14, 15, 16, 17, 18, 19, 20],
+            f: [1, 3, 7, 15, 21, 30, 12, 8, 3],
+            sh: ["ge", 18],
+          },
+          {
+            t: "с. 59, зад. 7 – извадка с обем 60",
+            x: [1, 3, 6, 26],
+            f: [8, 40, 10, 2],
+            sh: ["gt", 3],
+          },
+          {
+            t: "с. 59, зад. 8 – пет измервания",
+            x: [92, 94, 103, 105, 106],
+            f: [1, 1, 1, 1, 1],
+            sh: ["gt", 100],
+          },
+          {
+            t: "Урок 10, зад. 1 – брой прости по стотици, 1–1000",
+            x: [14, 15, 16, 17, 21, 25],
+            f: [3, 1, 3, 1, 1, 1],
+            note: "Стойност = брой прости числа в една стотица; честота = в колко стотици.",
+            sh: ["ge", 16],
+          },
+          {
+            t: "Урок 10, зад. 2 – отсъствия, таблица 1",
+            x: [0, 1, 2, 3, 4, 5, 6],
+            f: [7, 4, 3, 5, 2, 2, 2],
+            sh: ["le", 1],
+          },
+          {
+            t: "Урок 10, зад. 2 – отсъствия, таблица 2",
+            x: [0, 1, 2, 3, 4, 12],
+            f: [7, 10, 3, 2, 2, 1],
+            sh: ["le", 1],
+          },
+          {
+            t: "Урок 10, зад. 2 – отсъствия, таблица 3",
+            x: [0, 1, 2, 4, 6, 8],
+            f: [1, 10, 5, 3, 3, 3],
+            sh: ["le", 1],
+          },
+          {
+            t: "с. 63, зад. 1 – грешки, таблица 1",
+            x: [0, 1, 2, 3, 4, 5],
+            f: [3, 5, 5, 4, 2, 1],
+            sh: ["gt", 5],
+          },
+          {
+            t: "с. 63, зад. 1 – грешки, таблица 2",
+            x: [0, 1, 2, 3, 4, 5, 6],
+            f: [2, 6, 5, 2, 3, 1, 1],
+            sh: ["gt", 5],
+          },
+          {
+            t: "с. 63, зад. 1 – грешки, таблица 3",
+            x: [0, 1, 3, 4, 5],
+            f: [3, 6, 6, 3, 2],
+            sh: ["gt", 5],
+          },
+          {
+            t: "с. 63, зад. 2 – пътници, юни",
+            x: [10, 15, 16, 22, 25, 29, 34, 40, 47],
+            f: [3, 3, 1, 7, 3, 2, 3, 4, 4],
+            sh: ["ge", 40],
+          },
+          {
+            t: "с. 64, зад. 2 – пътници, ноември",
+            x: [11, 12, 16, 20, 26, 30, 35, 40, 46, 50],
+            f: [1, 1, 5, 5, 3, 3, 2, 3, 2, 5],
+            sh: ["ge", 40],
+          },
+        ];
+        var rows = [],
+          showDev = false,
+          hideCalc = false;
+        var sel = $("preset");
+        PRESETS.forEach(function (p, i) {
+          var o = document.createElement("option");
+          o.value = i;
+          o.textContent = p.t;
+          sel.appendChild(o);
+        });
+        function loadPreset(i) {
+          var p = PRESETS[i];
+          rows = p.x.map(function (x, j) {
+            return { x: String(x), f: String(p.f[j]) };
+          });
+          if (!rows.length)
+            rows = [
+              { x: "", f: "" },
+              { x: "", f: "" },
+              { x: "", f: "" },
+            ];
+          $("presetNote").textContent = p.note || "";
+          if (p.sh) {
+            $("shOp").value = p.sh[0];
+            $("shVal").value = p.sh[1];
+          }
+          edRender();
+          calc();
+        }
+        sel.onchange = function () {
+          loadPreset(+sel.value);
+        };
+        function edRender() {
+          var h =
+            '<tr><th class="m"><i>x<sub>i</sub></i></th><th class="m"><i>f<sub>i</sub></i></th><th></th></tr>';
+          rows.forEach(function (r, i) {
+            h +=
+              '<tr><td><input class="num" inputmode="decimal" data-i="' +
+              i +
+              '" data-c="x" value="' +
+              r.x +
+              '"></td>' +
+              '<td><input class="num" inputmode="numeric" data-i="' +
+              i +
+              '" data-c="f" value="' +
+              r.f +
+              '"></td>' +
+              '<td><button class="btn ghost" data-del="' +
+              i +
+              '" title="Изтрий реда">×</button></td></tr>';
+          });
+          $("edT").innerHTML = h;
+          var ins = $("edT").querySelectorAll("input");
+          for (var k = 0; k < ins.length; k++)
+            ins[k].oninput = function () {
+              rows[+this.getAttribute("data-i")][this.getAttribute("data-c")] =
+                this.value;
+              calc();
+            };
+          var ds = $("edT").querySelectorAll("[data-del]");
+          for (var k = 0; k < ds.length; k++)
+            ds[k].onclick = function () {
+              rows.splice(+this.getAttribute("data-del"), 1);
+              edRender();
+              calc();
+            };
+        }
+        $("addRow").onclick = function () {
+          rows.push({ x: "", f: "" });
+          edRender();
+          var ins = $("edT").querySelectorAll("input");
+          if (ins.length) ins[ins.length - 2].focus();
+        };
+        $("clrRows").onclick = function () {
+          rows = [
+            { x: "", f: "" },
+            { x: "", f: "" },
+            { x: "", f: "" },
+          ];
+          sel.value = 0;
+          $("presetNote").textContent = "";
+          edRender();
+          calc();
+        };
+        $("tgDev").onclick = function () {
+          showDev = !showDev;
+          this.classList.toggle("sel", showDev);
+          calc();
+        };
+        $("tgHide").onclick = function () {
+          hideCalc = !hideCalc;
+          this.classList.toggle("sel", hideCalc);
+          this.textContent = hideCalc ? "Покажи сметките" : "Скрий сметките";
+          calc();
+        };
+        $("shOp").onchange = calc;
+        $("shVal").oninput = calc;
+        function pv(s) {
+          s = String(s).replace(",", ".").replace("−", "-").trim();
+          if (s === "") return NaN;
+          return +s;
+        }
+        function calc() {
+          var d = [];
+          rows.forEach(function (r) {
+            var x = pv(r.x),
+              f = pv(r.f);
+            if (isFinite(x) && isFinite(f) && f > 0) d.push({ x: x, f: f });
+          });
+          d.sort(function (a, b) {
+            return a.x - b.x;
+          });
+          // сливане на еднакви стойности
+          var m = [];
+          d.forEach(function (r) {
+            if (m.length && m[m.length - 1].x === r.x) m[m.length - 1].f += r.f;
+            else m.push({ x: r.x, f: r.f });
+          });
+          d = m;
+          var T = $("calcT");
+          T.parentNode.parentNode.classList.toggle("hide-calc", hideCalc);
+          if (!d.length) {
+            T.innerHTML =
+              '<tr><td class="note">Въведете стойности и честоти.</td></tr>';
+            $("resBox").innerHTML = "";
+            $("shRes").innerHTML = "";
+            return;
+          }
+          var n = 0,
+            sxf = 0,
+            sx2f = 0;
+          d.forEach(function (r) {
+            n += r.f;
+            sxf += r.x * r.f;
+            sx2f += r.x * r.x * r.f;
+          });
+          var mean = sxf / n,
+            s2 = sx2f / n - mean * mean;
+          if (Math.abs(s2) < 1e-12) s2 = 0;
+          var sdev = 0;
+          d.forEach(function (r) {
+            sdev += (r.x - mean) * (r.x - mean) * r.f;
+          });
+          var hh =
+            '<tr><th class="m"><i>x<sub>i</sub></i></th><th class="m"><i>f<sub>i</sub></i></th><th class="m"><i>x<sub>i</sub> f<sub>i</sub></i></th><th class="m"><i>x<sub>i</sub></i><sup>2</sup><i>f<sub>i</sub></i></th>';
+          if (showDev)
+            hh +=
+              '<th class="m"><i>x<sub>i</sub></i> − ' +
+              XB +
+              '</th><th class="m">(<i>x<sub>i</sub></i> − ' +
+              XB +
+              ')<sup>2</sup></th><th class="m">(<i>x<sub>i</sub></i> − ' +
+              XB +
+              ")<sup>2</sup><i>f<sub>i</sub></i></th>";
+          hh += "</tr>";
+          d.forEach(function (r) {
+            var dv = r.x - mean;
+            hh +=
+              "<tr><td>" +
+              fmtNum(r.x) +
+              "</td><td>" +
+              fmtNum(r.f) +
+              '</td><td class="calc">' +
+              fmtNum(r.x * r.f) +
+              '</td><td class="calc">' +
+              fmtNum(r.x * r.x * r.f) +
+              "</td>";
+            if (showDev)
+              hh +=
+                '<td class="calc">' +
+                fmtNum(dv) +
+                '</td><td class="calc">' +
+                fmtNum(dv * dv) +
+                '</td><td class="calc">' +
+                fmtNum(dv * dv * r.f) +
+                "</td>";
+            hh += "</tr>";
+          });
+          hh +=
+            '<tr class="sum"><td>∑</td><td>' +
+            fmtNum(n) +
+            '</td><td class="calc">' +
+            fmtNum(sxf) +
+            '</td><td class="calc">' +
+            fmtNum(sx2f) +
+            "</td>";
+          if (showDev)
+            hh +=
+              '<td></td><td></td><td class="calc">' + fmtNum(sdev) + "</td>";
+          hh += "</tr>";
+          T.innerHTML = hh;
+          // мода
+          var fmax = 0;
+          d.forEach(function (r) {
+            fmax = Math.max(fmax, r.f);
+          });
+          var modes = d
+            .filter(function (r) {
+              return r.f === fmax;
+            })
+            .map(function (r) {
+              return fmtNum(r.x);
+            });
+          var modeTxt =
+            modes.length === d.length && d.length > 1
+              ? "няма"
+              : modes.join("; ");
+          if (modes.length > 1 && modes.length < d.length)
+            modeTxt +=
+              ' <span class="note">(повече от една – данните не са хомогенни)</span>';
+          // медиана
+          function kth(k) {
+            var c = 0;
+            for (var i = 0; i < d.length; i++) {
+              c += d[i].f;
+              if (c >= k) return d[i].x;
+            }
+            return d[d.length - 1].x;
+          }
+          var med, medTxt;
+          if (n % 2 === 1) {
+            med = kth((n + 1) / 2);
+            medTxt = "позиция " + frac("<i>n</i>+1", "2") + " = " + (n + 1) / 2;
+          } else {
+            med = (kth(n / 2) + kth(n / 2 + 1)) / 2;
+            medTxt = "средно на " + n / 2 + "-ия и " + (n / 2 + 1) + "-ия член";
+          }
+          var r = "";
+          function L(a, b, cls) {
+            r +=
+              '<div class="line">' +
+              a +
+              ' <b class="' +
+              (cls || "") +
+              '">' +
+              b +
+              "</b></div>";
+          }
+          if (hideCalc) {
+            $("resBox").innerHTML =
+              '<span class="note">Сметките са скрити.</span>';
+          } else {
+            L("<i>n</i> = ∑ <i>f<sub>i</sub></i> =", fmtNum(n));
+            L(
+              XB +
+                " = " +
+                frac("∑ <i>x<sub>i</sub> f<sub>i</sub></i>", "<i>n</i>") +
+                " = " +
+                frac(fmtNum(sxf), fmtNum(n)),
+              fmtA(mean),
+              "c-g",
+            );
+            L("<i>M<sub>o</sub></i> =", modeTxt);
+            L(
+              "<i>M<sub>d</sub></i> = " +
+                fmtNum(med) +
+                ' &nbsp;<span class="note">(' +
+                medTxt +
+                ")</span>",
+              "",
+            );
+            L(
+              "<i>S</i><sup>2</sup> = " +
+                frac(
+                  "∑ <i>x<sub>i</sub></i><sup>2</sup><i>f<sub>i</sub></i>",
+                  "<i>n</i>",
+                ) +
+                " − " +
+                XB +
+                "<sup>2</sup> = " +
+                frac(fmtNum(sx2f), fmtNum(n)) +
+                " − " +
+                (mean < 0 ? "(" : "") +
+                fmtNum(mean) +
+                (mean < 0 ? ")" : "") +
+                "<sup>2</sup>",
+              fmtA(s2),
+              "c-n",
+            );
+            L("<i>S</i> = √<i>S</i><sup>2</sup>", fmtA(Math.sqrt(s2)));
+            if (n > 1)
+              L(
+                "<i>σ</i><sup>2</sup> ≈ " +
+                  frac("<i>n</i>", "<i>n</i>−1") +
+                  "<i>S</i><sup>2</sup> = " +
+                  frac(fmtNum(n), fmtNum(n - 1)) +
+                  "·" +
+                  fmtNum(s2),
+                fmtA((s2 * n) / (n - 1)),
+                "c-n1",
+              );
+            if (n > 1) L("<i>σ</i>", fmtA(Math.sqrt((s2 * n) / (n - 1))));
+            $("resBox").innerHTML = r;
+          }
+          // дял
+          var op = $("shOp").value,
+            a = pv($("shVal").value),
+            k = 0;
+          d.forEach(function (r) {
+            var ok = {
+              le: r.x <= a,
+              lt: r.x < a,
+              eq: r.x === a,
+              ge: r.x >= a,
+              gt: r.x > a,
+            }[op];
+            if (ok) k += r.f;
+          });
+          var sym = { le: "≤", lt: "&lt;", eq: "=", ge: "≥", gt: "&gt;" }[op];
+          if (hideCalc) {
+            $("shRes").innerHTML =
+              '<span class="note">Сметките са скрити.</span>';
+            return;
+          }
+          $("shRes").innerHTML = isFinite(a)
+            ? "<i>k</i> = " +
+              fmtNum(k) +
+              " от <i>n</i> = " +
+              fmtNum(n) +
+              " (стойности " +
+              sym +
+              " " +
+              fmtNum(a) +
+              ")<br><i>p</i> ≈ " +
+              frac(fmtNum(k), fmtNum(n)) +
+              ' <b class="c-p">' +
+              fmtA(k / n) +
+              "</b>"
+            : "";
+        }
+
+        /* ---------- старт ---------- */
+        function redrawAll() {
+          simCharts();
+          prBarDraw();
+          pr20Draw();
+        }
+        simRender();
+        prShowEnd();
+        prHistRender();
+        loadPreset(3);
+        sel.value = 3;
+        var rt;
+        window.addEventListener("resize", function () {
+          clearTimeout(rt);
+          rt = setTimeout(redrawAll, 120);
+        });
+      })();
+    </script>
+  </body>
+</html>
+Displaying Izvadki_uroci_9-10.html.

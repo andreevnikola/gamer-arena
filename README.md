@@ -4,6 +4,7 @@ Platform for gaming events and tournaments. School project at МГ „Акаде
 
 ## Links
 
+- Deployed app: [GamerArena](https://gamer-arena-cyan.vercel.app/)
 - Trello board: [GamerArena - Sprint 1](https://trello.com/b/DU88DdpV/gamerarena-sprint-1)
 - Design document (source of truth, Google Docs): [GamerArena Design ERD Architecture](https://docs.google.com/document/d/1eb1UVWwo2hGeQ7F6HJQQjH6Cy3m7HLGncpQ07OcbalY/edit)
 
